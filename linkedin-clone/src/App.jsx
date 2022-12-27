@@ -1,18 +1,30 @@
 import React from "react";
-import Header from "./Header";
 import "./App.css";
-import Sidebar from "./Sidebar";
+import Header from "./components/Header";
+import Sidebar from "./components/Sidebar";
+import Feed from "./components/Feed";
+import Login from "./components/Login";
+import { useSelector } from "react-redux";
+import { selectUser } from "./redux/auth/authSlice";
 
 function App() {
+	const user = useSelector(selectUser);
+	
 	return (
 		<div className="app">
 			<Header />
 			{/* AppBody */}
-			<div className="app__body">
-				<Sidebar />
-			</div>
+
+			{!user ? (
+				<Login />
+			) : (
+				<div className="app__body">
+					<Sidebar />
+					<Feed />
+				</div>
+			)}
+
 			{/* SideBar */}
-			{/* Feed */}
 			{/* Widgets */}
 		</div>
 	);
