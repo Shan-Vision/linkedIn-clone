@@ -16,10 +16,13 @@ import {
 	orderBy,
 	query,
 } from "firebase/firestore";
+import { useSelector } from "react-redux";
+import { selectUser } from "redux/auth/authSlice";
 
 function Feed() {
 	const [input, setInput] = useState("");
 	const [posts, setPosts] = useState([]);
+	const user = useSelector(selectUser);
 
 	useEffect(() => {
 		// Adding changes between snapshots
@@ -49,10 +52,10 @@ function Feed() {
 
 		// add collection "posts" into Cloud Firestore
 		await addDoc(collection(db, "posts"), {
-			name: "Shan Abdullaev",
-			decsription: "this is a test",
+			name: user.displayName,
+			email: user.email,
 			message: input,
-			photoUrl: "",
+			photoUrl: user.photoURL,
 			timestamp: serverTimestamp(),
 		});
 		setInput("");
@@ -81,11 +84,11 @@ function Feed() {
 					/>
 				</div>
 			</div>
-			{posts.map(({ id, data: { name, description, message, photoUrl } }) => (
+			{posts.map(({ id, data: { name, email, message, photoUrl } }) => (
 				<Post
 					key={id}
 					name={name}
-					description={description}
+					email={email}
 					message={message}
 					photoUrl={photoUrl}
 				/>

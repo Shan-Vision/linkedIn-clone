@@ -22,7 +22,7 @@ export const authSlice = createSlice({
 	initialState,
 	reducers: {
 		login: (state, { payload }) => {
-			state.value = payload;
+			state.user = payload;
 		},
 		logout: (state) => {
 			state.user = null;
