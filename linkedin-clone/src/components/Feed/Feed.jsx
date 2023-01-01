@@ -18,6 +18,7 @@ import {
 } from "firebase/firestore";
 import { useSelector } from "react-redux";
 import { selectUser } from "redux/auth/authSlice";
+import FlipMove from "react-flip-move";
 
 function Feed() {
 	const [input, setInput] = useState("");
@@ -28,19 +29,14 @@ function Feed() {
 		// Adding changes between snapshots
 		const postRef = collection(db, "posts");
 		const q = query(postRef, orderBy("timestamp", "desc"));
-		onSnapshot(
-			q,
-			// collection(db, "posts").orderBy("timestamp", "desc"),
-			// orderBy("timestamp", "desc"),
-			(snapshot) => {
-				setPosts(
-					snapshot.docs.map((doc) => ({
-						id: doc.id,
-						data: doc.data(),
-					}))
-				);
-			}
-		);
+		onSnapshot(q, (snapshot) => {
+			setPosts(
+				snapshot.docs.map((doc) => ({
+					id: doc.id,
+					data: doc.data(),
+				}))
+			);
+		});
 	}, []);
 
 	const inputChange = (e) => {
@@ -84,15 +80,17 @@ function Feed() {
 					/>
 				</div>
 			</div>
-			{posts.map(({ id, data: { name, email, message, photoUrl } }) => (
-				<Post
-					key={id}
-					name={name}
-					email={email}
-					message={message}
-					photoUrl={photoUrl}
-				/>
-			))}
+			<FlipMove>
+				{posts.map(({ id, data: { name, email, message, photoUrl } }) => (
+					<Post
+						key={id}
+						name={name}
+						email={email}
+						message={message}
+						photoUrl={photoUrl}
+					/>
+				))}
+			</FlipMove>
 		</div>
 	);
 }
